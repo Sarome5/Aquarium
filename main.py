@@ -11,13 +11,15 @@ def encode(packet):
     values = pickle.loads(data)
     return values
 
-data = b""
-while True:
-    connection, client_addr = server_socket.accept()
-    print('jetzt hamma eine connection, und zwar von', client_addr)
+def send():
+
+    data = b""
     while True:
+        connection, client_addr = server_socket.accept()
+        print('jetzt hamma eine connection, und zwar von', client_addr)
+        while True:
 
-        packet = connection.recv(200)
-        daten=encode(packet)
+            packet = connection.recv(200)
+            daten=encode(packet)
 
-        print(daten)
+            return(daten)
