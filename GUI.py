@@ -143,7 +143,6 @@ def btn_osmose_stop():
 
 window = tk.Tk()
 window.title("Aquarium")
-window.iconbitmap("fisch.ico")
 window.geometry("800x400")
 window.minsize(width=250, height=250)
 
