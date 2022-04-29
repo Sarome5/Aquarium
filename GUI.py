@@ -427,32 +427,7 @@ signal_NQ2.place(relx=0.234, rely=0.79)
 
 oval_NQ2 = signal_NQ2.create_oval(5, 5, 20, 20)
 
-
-
-
-
-
-#============Frame 2 code
-frame2_title= tk.Label(frame2, text="This is frame2", bg="yellow")
-frame2_title.grid(row=0, column=0)
-
-f2_btnf1 = tk.Button(frame2, text="frame1", command=lambda:show_frame(frame1))
-f2_btnf1.grid(row=1, column=0, ipadx=50, ipady=50)
-
-
-f2_btnf3 = tk.Button(frame2, text="frame3", command=lambda:show_frame(frame3))
-f2_btnf3.grid(row=2, column=0, ipadx=50, ipady=50)
-
-#============Frame 3 code
-frame1_title= tk.Label(frame3, text="This is frame3", bg="green")
-frame1_title.grid(row=0, column=0)
-
-f3_btnf1 = tk.Button(frame3, text="frame1", command=lambda:show_frame(frame1))
-f3_btnf1.grid(row=1, column=0, ipadx=50, ipady=50)
-
-
-f3_btnf2 = tk.Button(frame3, text="frame2", command=lambda:show_frame(frame2))
-f3_btnf2.grid(row=2, column=0, ipadx=50, ipady=50)
+#------------------
 
 
 comunication()
@@ -460,13 +435,3 @@ comunication()
 
 
 window.mainloop()
-
-
-'''
-f1_btnf2 = tk.Button(frame1, text="frame2", command=lambda:show_frame(frame2))
-f1_btnf2.grid(row=1, column=0, ipadx=50, ipady=50)
-
-
-f1_btnf3 = tk.Button(frame1, text="frame3", command=lambda:show_frame(frame3))
-f1_btnf3.grid(row=2, column=0, ipadx=50, ipady=50)
-'''
