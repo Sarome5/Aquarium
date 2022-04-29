@@ -17,6 +17,10 @@ def get_doubleword(adresse):
     a = (f"VD{adresse}")
     return(str(plc.read(a)))
 
+def set_bool(adresse, value):
+    a = (f"V{adresse}")
+    plc.write(a, value)
+
 
 '''if plc.get_connected():
     I1 = ("1024.0")
