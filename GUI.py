@@ -4,111 +4,121 @@ import plc_comunication as plc
 import multiprocessing
 import time
 
-try:
-    dict = plc.communication()
-except Exception as e:
-    print(type(e), e)
+
+
+
 
 def show_frame(frame):
     frame.tkraise()
 
-def comunication():
+def byte_to_bit_dict(byte):
+    index = 1
+    values={}
+    for b in str(byte)[::-1]:
+        values[index] = b
+        index +=1
+    return values
+
+
+
+def update():
     t = time.time()
     try:
-        dict = plc.communication()
-    except Exception as e:
-        print(type(e), e)
+        input = plc.communication()
 
-    try:
-
-        I1=dict["I1"]
-        I2=dict["I2"]
-        I3=dict["I3"]
-        I4=dict["I4"]
-        I5=dict["I5"]
-        I6=dict["I6"]
-        Q1=dict["Q1"]
-        Q2=dict["Q2"]
-        Q3=dict["Q3"]
-        Q4=dict["Q4"]
-        Q5=dict["Q5"]
-        NQ1=dict["NQ1"]
-        NQ2=dict["NQ1"]
-        NQ3=dict["NQ1"]
-        var_AI1.set(dict["AI1"])
-        var_wvjahr.set(dict["wv_jahr"] + " liter")
-        var_wvgesamt.set(dict["wv_gesamt"] + " liter")
+        values_input = byte_to_bit_dict(input["input_byte"])
+        values_output = byte_to_bit_dict(input["output_byte"])
+        values_nwoutput = byte_to_bit_dict(input["network_output_byte"])
 
 
-        if dict["NQ1"] == "1":
-            var_wvmonat.set(dict["wv_monat"] + " liter")
-            var_wvvormonat.set(dict["wv_monat2"] + " liter")
+        I1=values_input[1]
+        I2=values_input[2]
+        I3=values_input[3]
+        I4=values_input[4]
+        I5=values_input[5]
+        I6=values_input[6]
+        Q1=values_output[1]
+        Q2=values_output[2]
+        Q3=values_output[3]
+        Q4=values_output[4]
+        Q5=values_output[5]
+        NQ1=values_nwoutput[1]
+        NQ2=values_nwoutput[2]
+        NQ3=values_nwoutput[3]
+        var_AI1.set(input["AI1"])
+        var_wvjahr.set(input["wv_jahr"] + " liter")
+        var_wvgesamt.set(input["wv_gesamt"] + " liter")
+
+
+        if NQ1 == "1":
+            var_wvmonat.set(input["wv_monat"] + " liter")
+            var_wvvormonat.set(input["wv_monat2"] + " liter")
 
         else:
-            var_wvmonat.set(dict["wv_monat2"] + " liter")
-            var_wvvormonat.set(dict["wv_monat"] + " liter")
+            var_wvmonat.set(input["wv_monat2"] + " liter")
+            var_wvvormonat.set(input["wv_monat"] + " liter")
 
-        if dict["I1"] == "1":
+        if I1 == "1":
             signal_I1.itemconfig(oval_I1, fill="green")
         else:
             signal_I1.itemconfig(oval_I1, fill="red")
 
-        if dict["I2"] == "1":
+        if I2 == "1":
             signal_I2.itemconfig(oval_I2, fill="green")
         else:
             signal_I2.itemconfig(oval_I2, fill="red")
 
-        if dict["I3"] == "1":
+        if I3 == "1":
             signal_I3.itemconfig(oval_I3, fill="green")
         else:
             signal_I3.itemconfig(oval_I3, fill="red")
 
-        if dict["I4"] == "1":
+        if I4 == "1":
             signal_I4.itemconfig(oval_I4, fill="green")
         else:
             signal_I4.itemconfig(oval_I4, fill="red")
 
-        if dict["I5"] == "1":
+        if I5 == "1":
             signal_I5.itemconfig(oval_I5, fill="green")
         else:
             signal_I5.itemconfig(oval_I5, fill="red")
 
-        if dict["I6"] == "1":
+        if I6 == "1":
             signal_I6.itemconfig(oval_I6, fill="green")
         else:
             signal_I6.itemconfig(oval_I6, fill="red")
 
-        if dict["Q1"] == "1":
+        if Q1 == "1":
             signal_Q1.itemconfig(oval_Q1, fill="green")
         else:
             signal_Q1.itemconfig(oval_Q1, fill="red")
 
-        if dict["Q2"] == "1":
+        if Q2 == "1":
             signal_Q2.itemconfig(oval_Q2, fill="green")
         else:
             signal_Q2.itemconfig(oval_Q2, fill="red")
 
-        if dict["Q3"] == "1":
+        if Q3 == "1":
             signal_Q3.itemconfig(oval_Q3, fill="green")
         else:
             signal_Q3.itemconfig(oval_Q3, fill="red")
 
-        if dict["Q4"] == "1":
+        if Q4 == "1":
             signal_Q4.itemconfig(oval_Q4, fill="green")
         else:
             signal_Q4.itemconfig(oval_Q4, fill="red")
 
-        if dict["Q5"] == "1":
+        if Q5 == "1":
             signal_Q5.itemconfig(oval_Q5, fill="green")
         else:
             signal_Q5.itemconfig(oval_Q5, fill="red")
 
-        if dict["NQ2"] == "1":
+        if NQ2 == "1":
             signal_NQ2.itemconfig(oval_NQ2, fill="green")
         else:
             signal_NQ2.itemconfig(oval_NQ2, fill="red")
 
-        if dict["NQ3"] == "1":
+        if NQ3 == "1":
             signal_NQ3.itemconfig(oval_NQ3, fill="green")
         else:
             signal_NQ3.itemconfig(oval_NQ3, fill="red")
@@ -117,9 +127,19 @@ def comunication():
         var_aktualisierung.set(refreshrate)
 
     except Exception as e:
-        print(type(e), e)
-    #print(dict)
-    window.after(1000, comunication)
+        print("hier",type(e), e)
+
+    #print(input)
+    window.after(1000, update)
+
+def connection_status():
+    connected = plc.connection_status()
+    if connected == 1:
+        signal_conn.itemconfig(oval_conn, fill="green")
+    else:
+        signal_conn.itemconfig(oval_conn, fill="red")
+
+    window.after(1000, connection_status)
 
 
 
@@ -166,20 +186,6 @@ frame1.grid(row=0,column=0,sticky="nsew")
 
 #=============init
 
-I1=dict["I1"]
-I2=dict["I2"]
-I3=dict["I3"]
-I4=dict["I4"]
-I5=dict["I5"]
-I6=dict["I6"]
-Q1=dict["Q1"]
-Q2=dict["Q2"]
-Q3=dict["Q3"]
-Q4=dict["Q4"]
-Q5=dict["Q5"]
-NQ1=dict["NQ1"]
-NQ2=dict["NQ1"]
-NQ3=dict["NQ1"]
 
 var_AI1=StringVar()
 var_wvmonat=StringVar()
@@ -215,12 +221,17 @@ frame1_label_AI1.place(relx=0.50, rely=0.15, anchor=CENTER)
 frame1_label_akt_name= tk.Label(frame1,
                         text="Refreshrate:",
                         font="Arial 10")
-frame1_label_akt_name.place(relx=0.92, rely=0.95, anchor=E)
+frame1_label_akt_name.place(relx=0.91, rely=0.95, anchor=E)
 
 frame1_label_akt= tk.Label(frame1,
                         textvariable=var_aktualisierung,
                         font="Arial 10")
-frame1_label_akt.place(relx=0.95, rely=0.95, anchor=CENTER)
+frame1_label_akt.place(relx=0.94, rely=0.95, anchor=CENTER)
+
+signal_conn = tk.Canvas(window, width=20, height=20)  # Create 200x200 Canvas widget
+signal_conn.place(relx=0.96, rely=0.915)
+
+oval_conn = signal_conn.create_oval(5, 5, 20, 20)
 
 
 #----------
@@ -429,7 +440,8 @@ oval_NQ2 = signal_NQ2.create_oval(5, 5, 20, 20)
 #------------------
 
 
-comunication()
+update()
+connection_status()
 
 
 
