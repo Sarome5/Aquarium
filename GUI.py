@@ -20,6 +20,10 @@ def byte_to_bit_dict(byte):
 
 def update():
     t = time.time()
+    adc_lowstate=853
+    adc_highstate=686
+    phys_lowstate=190
+    phys_highstate=210
     try:
         input = plc.communication()
 
@@ -43,7 +47,9 @@ def update():
         NQ2=values_nwoutput[2]
         NQ3=values_nwoutput[3]
 
-        canvas.itemconfig(text_stand, text=input["AI1"])
+        wasserstand = str(plc.scaling(int(input["AI1"]), adc_lowstate, adc_highstate, phys_lowstate, phys_highstate))
+
+        canvas.itemconfig(text_stand, text=wasserstand+ " mm")
         canvas.itemconfig(text_jahr, text=input["wv_jahr"] + " liter")
         canvas.itemconfig(text_gesamt, text=input["wv_gesamt"] + " liter")
 
@@ -163,6 +169,7 @@ window = Tk()
 
 window.geometry("723x491")
 window.configure(bg = "#C4D1F4")
+window.iconbitmap(relative_to_assets("fisch.ico"))
 
 def change_oval():
     canvas.itemconfig(text_gesamt, text="1234")

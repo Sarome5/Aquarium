@@ -10,6 +10,14 @@ I00_17 = ("1024")
 Q00_17 = ("1064")
 NQ00_17 = ("1390")
 
+
+
+def scaling(adc, adc_l, adc_h, phys_l, phys_h):
+    steigung = ((phys_l-phys_h)/(adc_l-adc_h))
+    offset = phys_l-(steigung*adc_l)
+    scaled_value = adc * steigung + offset
+    return(int(scaled_value))
+
 def communication():
     values={}
     values["input_byte"] = bin(int(plc_module.get_word(I00_17)))[2:-8].zfill(8)

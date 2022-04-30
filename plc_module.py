@@ -45,6 +45,13 @@ def set_bool(adresse, value):
     except Exception as e:
         connect(plc,"10.0.0.201")
 
+def set_doubleword(adresse, value):
+    try:
+        a = (f"VD{adresse}")
+        plc.write(a, value)
+    except Exception as e:
+        connect(plc,"10.0.0.201")
+
 def connection_status():
     if plc.get_connected():
         return(1)
